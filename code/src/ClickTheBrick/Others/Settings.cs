@@ -23,13 +23,13 @@
  */
 
 using System;
-using System.IO;
-using System.Xml;
-using System.Drawing;
-using System.Diagnostics;
-using System.Windows.Forms;
-using System.Xml.Serialization;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing;
+using System.IO;
+using System.Windows.Forms;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace plexdata.ClickTheBrick
 {
@@ -71,7 +71,7 @@ namespace plexdata.ClickTheBrick
 
         #region Public static member function section.
 
-        public static string Filename
+        public static String Filename
         {
             get
             {
@@ -88,12 +88,12 @@ namespace plexdata.ClickTheBrick
             }
         }
 
-        public static bool Save(ApplicationSettings settings)
+        public static Boolean Save(ApplicationSettings settings)
         {
             return ApplicationSettings.Save(ApplicationSettings.Filename, settings);
         }
 
-        public static bool Save(string filename, ApplicationSettings settings)
+        public static Boolean Save(String filename, ApplicationSettings settings)
         {
             try
             {
@@ -111,12 +111,12 @@ namespace plexdata.ClickTheBrick
             }
         }
 
-        public static bool Load(out ApplicationSettings settings)
+        public static Boolean Load(out ApplicationSettings settings)
         {
             return ApplicationSettings.Load(ApplicationSettings.Filename, out settings);
         }
 
-        public static bool Load(string filename, out ApplicationSettings settings)
+        public static Boolean Load(String filename, out ApplicationSettings settings)
         {
             settings = null;
 
@@ -147,7 +147,7 @@ namespace plexdata.ClickTheBrick
         public Font Font { get; set; }
 
         [XmlElement("Font")]
-        public string FontXML
+        public String FontXML
         {
             get
             {
@@ -179,7 +179,7 @@ namespace plexdata.ClickTheBrick
         public Color ForeColor { get; set; }
 
         [XmlElement("ForeColor")]
-        public string ForeColorXML
+        public String ForeColorXML
         {
             get
             {
@@ -203,7 +203,7 @@ namespace plexdata.ClickTheBrick
         public Color BackColor { get; set; }
 
         [XmlElement("BackColor")]
-        public string BackColorXML
+        public String BackColorXML
         {
             get
             {
@@ -231,7 +231,7 @@ namespace plexdata.ClickTheBrick
 
         #region Public member function section.
 
-        public object Clone()
+        public Object Clone()
         {
             return new ApplicationSettings(this);
         }
@@ -289,7 +289,7 @@ namespace plexdata.ClickTheBrick
         public Font Font { get; set; }
 
         [XmlElement("Font")]
-        public string FontXML
+        public String FontXML
         {
             get
             {
@@ -321,7 +321,7 @@ namespace plexdata.ClickTheBrick
         public Color ForeColor { get; set; }
 
         [XmlElement("ForeColor")]
-        public string ForeColorXML
+        public String ForeColorXML
         {
             get
             {
@@ -345,7 +345,7 @@ namespace plexdata.ClickTheBrick
         public Color BackColor { get; set; }
 
         [XmlElement("BackColor")]
-        public string BackColorXML
+        public String BackColorXML
         {
             get
             {
@@ -365,7 +365,7 @@ namespace plexdata.ClickTheBrick
             }
         }
 
-        public bool Highlight { get; set; }
+        public Boolean Highlight { get; set; }
 
         public Dimension Dimension { get; set; }
 
@@ -373,12 +373,12 @@ namespace plexdata.ClickTheBrick
         public Color[] BrickColors { get; set; }
 
         [XmlArray("BrickColors")]
-        [XmlArrayItem(ElementName = "Color", Type = typeof(string))]
-        public string[] BrickColorsXML
+        [XmlArrayItem(ElementName = "Color", Type = typeof(String))]
+        public String[] BrickColorsXML
         {
             get
             {
-                List<string> result = new List<string>();
+                List<String> result = new List<String>();
                 if (this.BrickColors != null)
                 {
                     foreach (Color color in this.BrickColors)
@@ -393,7 +393,7 @@ namespace plexdata.ClickTheBrick
                 List<Color> colors = new List<Color>();
                 if (value != null && value.Length > 0)
                 {
-                    foreach (string name in value)
+                    foreach (String name in value)
                     {
                         try
                         {
@@ -417,7 +417,7 @@ namespace plexdata.ClickTheBrick
 
         #region Public member function section.
 
-        public object Clone()
+        public Object Clone()
         {
             return new BrickPanelSettings(this);
         }
@@ -432,7 +432,7 @@ namespace plexdata.ClickTheBrick
         {
         }
 
-        public Dimension(int rows, int cols)
+        public Dimension(Int32 rows, Int32 cols)
             : base()
         {
             this.Rows = rows;
@@ -455,12 +455,12 @@ namespace plexdata.ClickTheBrick
 
         #region Public property section.
 
-        public int Rows { get; set; }
+        public Int32 Rows { get; set; }
 
-        public int Cols { get; set; }
+        public Int32 Cols { get; set; }
 
         [XmlIgnore]
-        public string Display
+        public String Display
         {
             get
             {
@@ -469,7 +469,7 @@ namespace plexdata.ClickTheBrick
         }
 
         [XmlIgnore]
-        public bool IsValid
+        public Boolean IsValid
         {
             get
             {
@@ -498,12 +498,12 @@ namespace plexdata.ClickTheBrick
             }
         }
 
-        public object Clone()
+        public Object Clone()
         {
             return new Dimension(this);
         }
 
-        public override string ToString()
+        public override String ToString()
         {
             return String.Format("Rows={0}, Cols={1}, Valid={2}",
                 this.Rows, this.Cols, (this.IsValid ? "true" : "false"));

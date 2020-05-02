@@ -23,17 +23,16 @@
  */
 
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("ClickTheBrick")]
+[assembly: AssemblyTitle("Click The Brick")]
 [assembly: AssemblyDescription("Click the bricks with same color to remove them. Each removed block gets a score. The bigger the removed block the higher the score. Have fun and happy clicking...")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("PlexData")]
-[assembly: AssemblyProduct("ClickTheBrick")]
+[assembly: AssemblyProduct("Click The Brick")]
 [assembly: AssemblyCopyright("Copyright © 2020 - plexdata.de")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -56,5 +55,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.1.4.3")]
-[assembly: AssemblyFileVersion("1.1.4.3")]
+[assembly: AssemblyVersion("1.2.0")]
+[assembly: AssemblyFileVersion("1.2.0")]

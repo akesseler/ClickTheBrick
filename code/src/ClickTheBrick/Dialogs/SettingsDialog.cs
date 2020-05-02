@@ -23,11 +23,11 @@
  */
 
 using System;
-using System.Drawing;
-using System.Diagnostics;
-using System.Windows.Forms;
-using System.ComponentModel;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace plexdata.ClickTheBrick
 {
@@ -92,7 +92,7 @@ namespace plexdata.ClickTheBrick
             }
         }
 
-        private void OnButtonApplyClick(object sender, EventArgs args)
+        private void OnButtonApplyClick(Object sender, EventArgs args)
         {
             try
             {
@@ -105,12 +105,14 @@ namespace plexdata.ClickTheBrick
                 }
                 else
                 {
-                    Dimension dimension = this.cmbDimensions.SelectedItem as Dimension;
-                    if (dimension != null) { this.Settings.Dimension = dimension; }
+                    if (this.cmbDimensions.SelectedItem is Dimension dimension)
+                    {
+                        this.Settings.Dimension = dimension;
+                    }
                 }
 
-                List<string> colors = new List<string>();
-                foreach (object current in this.lstColors.Items)
+                List<String> colors = new List<String>();
+                foreach (Object current in this.lstColors.Items)
                 {
                     if (current != null) { colors.Add(current.ToString()); }
                 }
@@ -122,12 +124,12 @@ namespace plexdata.ClickTheBrick
             }
         }
 
-        private void OnValidatingDimension(object sender, CancelEventArgs args)
+        private void OnValidatingDimension(Object sender, CancelEventArgs args)
         {
             if (this.chkCustom.Checked)
             {
-                int rows = Convert.ToInt32(this.numRows.Value);
-                int cols = Convert.ToInt32(this.numCols.Value);
+                Int32 rows = Convert.ToInt32(this.numRows.Value);
+                Int32 cols = Convert.ToInt32(this.numCols.Value);
 
                 args.Cancel = (((rows * cols) & 1) != 0);
                 if (args.Cancel)
@@ -143,29 +145,30 @@ namespace plexdata.ClickTheBrick
             }
         }
 
-        private void OnValidatingColors(object sender, CancelEventArgs args)
+        private void OnValidatingColors(Object sender, CancelEventArgs args)
         {
             args.Cancel = !this.ColorsValidate();
         }
 
-        private void OnCustomCheckedChanged(object sender, EventArgs args)
+        private void OnCustomCheckedChanged(Object sender, EventArgs args)
         {
             this.numRows.Enabled = this.chkCustom.Checked;
             this.numCols.Enabled = this.chkCustom.Checked;
             this.cmbDimensions.Enabled = !this.chkCustom.Checked;
         }
 
-        private void OnButtonAddClick(object sender, EventArgs args)
+        private void OnButtonAddClick(Object sender, EventArgs args)
         {
-            ColorDialog dialog = new ColorDialog();
-
-            dialog.AnyColor = true;
-            dialog.SolidColorOnly = true;
-            dialog.AllowFullOpen = true;
+            ColorDialog dialog = new ColorDialog
+            {
+                AnyColor = true,
+                SolidColorOnly = true,
+                AllowFullOpen = true
+            };
 
             if (DialogResult.OK == dialog.ShowDialog(this))
             {
-                string name = ColorTranslator.ToHtml(dialog.Color);
+                String name = ColorTranslator.ToHtml(dialog.Color);
                 if (!this.lstColors.Items.Contains(name))
                 {
                     this.lstColors.Items.Add(name);
@@ -174,7 +177,7 @@ namespace plexdata.ClickTheBrick
             this.ColorsValidate();
         }
 
-        private void OnButtonRemoveClick(object sender, EventArgs args)
+        private void OnButtonRemoveClick(Object sender, EventArgs args)
         {
             while (this.lstColors.SelectedItems.Count > 0)
             {
@@ -183,18 +186,18 @@ namespace plexdata.ClickTheBrick
             this.ColorsValidate();
         }
 
-        private void OnColorListSectionChanged(object sender, EventArgs args)
+        private void OnColorListSectionChanged(Object sender, EventArgs args)
         {
             this.btnRemove.Enabled = this.lstColors.SelectedIndices.Count > 0;
         }
 
-        private void OnColorListDrawItem(object sender, DrawItemEventArgs args)
+        private void OnColorListDrawItem(Object sender, DrawItemEventArgs args)
         {
             try
             {
                 args.DrawBackground();
 
-                string text = this.lstColors.Items[args.Index].ToString();
+                String text = this.lstColors.Items[args.Index].ToString();
                 Color item = ColorTranslator.FromHtml(text);
 
                 Rectangle itemRect = args.Bounds;
@@ -225,7 +228,7 @@ namespace plexdata.ClickTheBrick
             }
         }
 
-        private bool ColorsValidate()
+        private Boolean ColorsValidate()
         {
             if (this.lstColors.Items.Count <= 0)
             {

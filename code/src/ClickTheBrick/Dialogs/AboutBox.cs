@@ -48,12 +48,12 @@ namespace plexdata.ClickTheBrick
             this.lnkIconAuthor.Links.Add(9, 17, "http://openiconlibrary.sourceforge.net/");
         }
 
-        private void OnLogoImageClick(object sender, EventArgs args)
+        private void OnLogoImageClick(Object sender, EventArgs args)
         {
             Process.Start("http://www.plexdata.de/");
         }
 
-        private void OnIconAuthorClick(object sender, LinkLabelLinkClickedEventArgs args)
+        private void OnIconAuthorClick(Object sender, LinkLabelLinkClickedEventArgs args)
         {
             args.Link.Visited = true;
             Process.Start(args.Link.LinkData.ToString());
@@ -61,11 +61,11 @@ namespace plexdata.ClickTheBrick
 
         #region Assembly Attribute Accessors
 
-        public static string Title
+        public static String Title
         {
             get
             {
-                object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyTitleAttribute), false);
+                Object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyTitleAttribute), false);
                 if (attributes.Length > 0)
                 {
                     AssemblyTitleAttribute titleAttribute = (AssemblyTitleAttribute)attributes[0];
@@ -78,20 +78,20 @@ namespace plexdata.ClickTheBrick
             }
         }
 
-        public static string Version
+        public static String Version
         {
             get
             {
                 Version version = Assembly.GetExecutingAssembly().GetName().Version;
-                return String.Format("{0}.{1} ({2})", version.Major, version.Minor, version.Build << 8 | (byte)version.Revision);
+                return String.Format("{0}.{1}.{2}", version.Major, version.Minor, version.Build);
             }
         }
 
-        public static string Description
+        public static String Description
         {
             get
             {
-                object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyDescriptionAttribute), false);
+                Object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyDescriptionAttribute), false);
                 if (attributes.Length == 0)
                 {
                     return String.Empty;
@@ -100,11 +100,11 @@ namespace plexdata.ClickTheBrick
             }
         }
 
-        public static string Product
+        public static String Product
         {
             get
             {
-                object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyProductAttribute), false);
+                Object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyProductAttribute), false);
                 if (attributes.Length == 0)
                 {
                     return String.Empty;
@@ -113,11 +113,11 @@ namespace plexdata.ClickTheBrick
             }
         }
 
-        public static string Copyright
+        public static String Copyright
         {
             get
             {
-                object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyCopyrightAttribute), false);
+                Object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyCopyrightAttribute), false);
                 if (attributes.Length == 0)
                 {
                     return String.Empty;
@@ -126,11 +126,11 @@ namespace plexdata.ClickTheBrick
             }
         }
 
-        public static string Company
+        public static String Company
         {
             get
             {
-                object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyCompanyAttribute), false);
+                Object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyCompanyAttribute), false);
                 if (attributes.Length == 0)
                 {
                     return String.Empty;

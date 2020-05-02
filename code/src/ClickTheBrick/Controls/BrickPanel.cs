@@ -23,12 +23,12 @@
  */
 
 using System;
-using System.Drawing;
 using System.Collections;
-using System.Diagnostics;
-using System.Windows.Forms;
-using System.ComponentModel;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace plexdata.ClickTheBrick
 {
@@ -41,12 +41,12 @@ namespace plexdata.ClickTheBrick
         public event EventHandler<EventArgs> BrickCountChanged;
         public event EventHandler<UndoneEventArgs> Undone;
 
-        private int brickCount = 0;
+        private Int32 brickCount = 0;
         private Brick lastBrick = null;
         private Brick[,] bricks = null;
         private List<Brick> blocks = null;
-        private Stack undoStack = null;
-        private object critical = new object();
+        private readonly Stack undoStack = null;
+        private readonly Object critical = new Object();
 
         public BrickPanel()
             : base()
@@ -71,10 +71,10 @@ namespace plexdata.ClickTheBrick
         #region Public property section.
 
         [Browsable(false)]
-        public bool Frozen { get; set; }
+        public Boolean Frozen { get; set; }
 
         [Browsable(false)]
-        public bool IsPossible
+        public Boolean IsPossible
         {
             get
             {
@@ -98,7 +98,7 @@ namespace plexdata.ClickTheBrick
         }
 
         [Browsable(false)]
-        public bool CanUndo
+        public Boolean CanUndo
         {
             get
             {
@@ -108,11 +108,11 @@ namespace plexdata.ClickTheBrick
 
         [Browsable(true)]
         [DefaultValue(true)]
-        public bool Highlight { get; set; }
+        public Boolean Highlight { get; set; }
 
         [Browsable(true)]
         [DefaultValue("")]
-        public override string Text
+        public override String Text
         {
             get
             {
@@ -131,16 +131,14 @@ namespace plexdata.ClickTheBrick
         {
             get
             {
-                int rows, cols;
-                this.GetDimension(out rows, out cols);
+                this.GetDimension(out Int32 rows, out Int32 cols);
                 return new Point(cols, rows);
             }
             set
             {
                 if (value != null)
                 {
-                    int rows, cols;
-                    this.GetDimension(out rows, out cols);
+                    this.GetDimension(out Int32 rows, out Int32 cols);
 
                     if (value.X != cols || value.Y != rows)
                     {
@@ -156,7 +154,7 @@ namespace plexdata.ClickTheBrick
         public Color[] BrickColors { set; get; }
 
         [Browsable(false)]
-        public int BrickCount
+        public Int32 BrickCount
         {
             get
             {
@@ -169,23 +167,20 @@ namespace plexdata.ClickTheBrick
                     this.brickCount = value;
 
                     // Raise change event.
-                    if (this.BrickCountChanged != null)
-                    {
-                        this.BrickCountChanged(this, EventArgs.Empty);
-                    }
+                    this.BrickCountChanged?.Invoke(this, EventArgs.Empty);
                 }
             }
         }
 
         [Browsable(false)]
-        public int TotalBrickCount { get; private set; }
+        public Int32 TotalBrickCount { get; private set; }
 
         [Browsable(false)]
-        public int LastBlockSize { get; private set; }
+        public Int32 LastBlockSize { get; private set; }
 
         // This table represents the number of brick available for each color.
         [Browsable(false)]
-        public Dictionary<Color, int> BrickColorTable { get; private set; }
+        public Dictionary<Color, Int32> BrickColorTable { get; private set; }
 
         #endregion // Public property section.
 
@@ -198,8 +193,7 @@ namespace plexdata.ClickTheBrick
                 throw new ArgumentNullException("BrickColors");
             }
 
-            int rows, cols;
-            this.GetDimension(out rows, out cols);
+            this.GetDimension(out Int32 rows, out Int32 cols);
 
             Point offset = new Point(
                 this.DisplayRectangle.Left + (this.DisplayRectangle.Width - cols * BrickSize.Width) / 2,
@@ -216,7 +210,7 @@ namespace plexdata.ClickTheBrick
             this.brickCount = this.TotalBrickCount; // Do not cause the firing of the change event!
 
             // Initialize the brick color table.
-            this.BrickColorTable = new Dictionary<Color, int>();
+            this.BrickColorTable = new Dictionary<Color, Int32>();
             foreach (Color current in this.BrickColors)
             {
                 this.BrickColorTable[current] = 0;
@@ -225,7 +219,7 @@ namespace plexdata.ClickTheBrick
             // Initialize the random color table. Keep in 
             // mind, total brick count is already even.
             List<Color> colors = new List<Color>();
-            for (int index = 0; index < this.TotalBrickCount / 2; index++)
+            for (Int32 index = 0; index < this.TotalBrickCount / 2; index++)
             {
                 // Add next color pair.
                 colors.Add(this.BrickColors[index % this.BrickColors.Length]);
@@ -235,13 +229,13 @@ namespace plexdata.ClickTheBrick
             // Keep me informed...
             Debug.Assert(this.TotalBrickCount == colors.Count);
 
-            Random random = new Random((int)DateTime.Now.Ticks);
-            for (int row = 0; row < rows; row++)
+            Random random = new Random((Int32)DateTime.Now.Ticks);
+            for (Int32 row = 0; row < rows; row++)
             {
-                for (int col = 0; col < cols; col++)
+                for (Int32 col = 0; col < cols; col++)
                 {
                     // Get next color index for the random color table.
-                    int index = random.Next(0, colors.Count);
+                    Int32 index = random.Next(0, colors.Count);
 
                     this.bricks[row, col] = new Brick(offset, BrickPanel.BrickSize);
 
@@ -301,22 +295,20 @@ namespace plexdata.ClickTheBrick
                 }
 
                 // Fire event, if possible.
-                if (this.Undone != null) { this.Undone(this, undoItem); }
-
+                this.Undone?.Invoke(this, undoItem);
             }
         }
 
-        public bool AddTopBricks()
+        public Boolean AddTopBricks()
         {
-            int added = 0;
+            Int32 added = 0;
 
             if (this.bricks != null)
             {
                 // Lock access to bricks matrix!
                 lock (this.critical)
                 {
-                    int rows, cols;
-                    this.GetDimension(out rows, out cols);
+                    this.GetDimension(out Int32 rows, out Int32 cols);
 
                     Point offset = new Point(
                         this.DisplayRectangle.Left + (this.DisplayRectangle.Width - cols * BrickSize.Width) / 2,
@@ -325,26 +317,26 @@ namespace plexdata.ClickTheBrick
                     // Initialize the random color table. Keep in 
                     // mind, total brick count is already even.
                     List<Color> colors = new List<Color>();
-                    for (int index = 0; index < cols; index++)
+                    for (Int32 index = 0; index < cols; index++)
                     {
                         colors.Add(this.BrickColors[index % this.BrickColors.Length]);
                     }
 
-                    Random random = new Random((int)DateTime.Now.Ticks);
-                    for (int col = 0; col < cols; col++)
+                    Random random = new Random((Int32)DateTime.Now.Ticks);
+                    for (Int32 col = 0; col < cols; col++)
                     {
-                        for (int row = 0; row < rows; row++)
+                        for (Int32 row = 0; row < rows; row++)
                         {
                             // Determine current adding conditions.
-                            bool a = (row - 1 >= 0 && this.bricks[row - 1, col] == null && this.bricks[row, col] != null);
-                            bool b = (row + 1 == rows && this.bricks[row, col] == null);
+                            Boolean a = (row - 1 >= 0 && this.bricks[row - 1, col] == null && this.bricks[row, col] != null);
+                            Boolean b = (row + 1 == rows && this.bricks[row, col] == null);
 
                             if (!a && !b) { continue; }
 
                             if (a) { row--; }
 
                             // Get next color index for the random color table.
-                            int index = random.Next(0, colors.Count);
+                            Int32 index = random.Next(0, colors.Count);
 
                             this.bricks[row, col] = new Brick(offset, BrickPanel.BrickSize);
 
@@ -378,7 +370,7 @@ namespace plexdata.ClickTheBrick
             return added > 0;
         }
 
-        public void SetDimension(int rows, int cols)
+        public void SetDimension(Int32 rows, Int32 cols)
         {
             // The dimension must not be less or equal to zero!
             if (rows <= 0 || cols <= 0 || rows * cols <= 0)
@@ -392,7 +384,7 @@ namespace plexdata.ClickTheBrick
             }
             else
             {
-                int border = 0;
+                Int32 border = 0;
                 switch (this.BorderStyle)
                 {
                     case BorderStyle.Fixed3D:
@@ -406,14 +398,14 @@ namespace plexdata.ClickTheBrick
                         break;
                 }
 
-                int cx = cols * BrickSize.Width + this.Padding.Horizontal + border;
-                int cy = rows * BrickSize.Height + this.Padding.Vertical + border;
+                Int32 cx = cols * BrickSize.Width + this.Padding.Horizontal + border;
+                Int32 cy = rows * BrickSize.Height + this.Padding.Vertical + border;
 
                 this.Size = new Size(cx, cy);
             }
         }
 
-        public void GetDimension(out int rows, out int cols)
+        public void GetDimension(out Int32 rows, out Int32 cols)
         {
             // An even number of bricks is required! Otherwise the game cannot be solved.
 
@@ -473,17 +465,17 @@ namespace plexdata.ClickTheBrick
                     this.bricks[current.Position.Y, current.Position.X] = null;
                 }
 
-                int rows = this.bricks.GetUpperBound(0) + 1;
-                int cols = this.bricks.GetUpperBound(1) + 1;
-                int off = 0;
+                Int32 rows = this.bricks.GetUpperBound(0) + 1;
+                Int32 cols = this.bricks.GetUpperBound(1) + 1;
+                Int32 off = 0;
 
                 #region Row removal...
 
                 // Search from left to right.
-                for (int col = 0; col < cols; col++)
+                for (Int32 col = 0; col < cols; col++)
                 {
                     // Search from bottom to top.
-                    for (int row = rows - 1; row >= 0; row--)
+                    for (Int32 row = rows - 1; row >= 0; row--)
                     {
                         // Check if current block is set as empty.
                         if (this.bricks[row, col] == null)
@@ -527,13 +519,13 @@ namespace plexdata.ClickTheBrick
                 Brick[,] clone = new Brick[rows, cols];
 
                 // Search from left to right.
-                for (int col = off = 0; col < cols; col++)
+                for (Int32 col = off = 0; col < cols; col++)
                 {
-                    bool empty = true;
+                    Boolean empty = true;
 
                     // Search from bottom to top because it is very 
                     // likely that the lowest brick is not NULL!
-                    for (int row = rows - 1; row >= 0 && empty; row--)
+                    for (Int32 row = rows - 1; row >= 0 && empty; row--)
                     {
                         // Check if current block is set as empty.
                         empty &= this.bricks[row, col] == null;
@@ -541,7 +533,7 @@ namespace plexdata.ClickTheBrick
 
                     if (!empty)
                     {
-                        for (int row = 0; row < rows; row++)
+                        for (Int32 row = 0; row < rows; row++)
                         {
                             clone[row, off] = this.bricks[row, col];
                             if (clone[row, off] != null)
@@ -672,7 +664,7 @@ namespace plexdata.ClickTheBrick
             return null;
         }
 
-        private Brick BrickFromPosition(int row, int col)
+        private Brick BrickFromPosition(Int32 row, Int32 col)
         {
             if (this.bricks != null)
             {
@@ -693,8 +685,8 @@ namespace plexdata.ClickTheBrick
             {
                 result.Add(brick);
 
-                int row = brick.Position.Y;
-                int col = brick.Position.X;
+                Int32 row = brick.Position.Y;
+                Int32 col = brick.Position.X;
                 Brick sibling = null;
 
                 // Sibling from the north.
@@ -799,7 +791,7 @@ namespace plexdata.ClickTheBrick
 
         private Brick[,] GetBricksCopy()
         {
-            bool valid = false;
+            Boolean valid = false;
             Brick[,] result = null;
 
             if (this.bricks != null)
@@ -807,14 +799,14 @@ namespace plexdata.ClickTheBrick
                 // Lock access to bricks matrix!
                 lock (this.critical)
                 {
-                    int rows = this.bricks.GetUpperBound(0) + 1;
-                    int cols = this.bricks.GetUpperBound(1) + 1;
+                    Int32 rows = this.bricks.GetUpperBound(0) + 1;
+                    Int32 cols = this.bricks.GetUpperBound(1) + 1;
 
                     result = new Brick[rows, cols];
 
-                    for (int row = 0; row < rows; row++)
+                    for (Int32 row = 0; row < rows; row++)
                     {
-                        for (int col = 0; col < cols; col++)
+                        for (Int32 col = 0; col < cols; col++)
                         {
                             if (this.bricks[row, col] != null)
                             {
@@ -839,7 +831,7 @@ namespace plexdata.ClickTheBrick
 
     public class UndoneEventArgs : EventArgs
     {
-        public UndoneEventArgs(Brick[,] copy, int score, int left)
+        public UndoneEventArgs(Brick[,] copy, Int32 score, Int32 left)
             : base()
         {
             this.ScoreValue = score;
@@ -847,9 +839,9 @@ namespace plexdata.ClickTheBrick
             this.BricksCopy = copy;
         }
 
-        public int ScoreValue { get; private set; }
+        public Int32 ScoreValue { get; private set; }
 
-        public int BricksLeft { get; private set; }
+        public Int32 BricksLeft { get; private set; }
 
         public Brick[,] BricksCopy { get; private set; }
     }

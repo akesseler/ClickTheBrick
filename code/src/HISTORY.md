@@ -1,5 +1,16 @@
 
 
+**1.2.0**
+
+- Version number handling changed.
+- Usage of framework types.
+- High score summarization modified.
+  - Showing of played and completed games in group headers.
+  - Loading of high score of today when showing high score dialog.
+- Version number increased.
+- Released on _GitHub_.
+- Released on _sourceforge.net_.
+
 **1.1.4.3**
 
 - Conversion into a Visual Studio 2017 project.

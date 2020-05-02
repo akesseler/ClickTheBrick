@@ -23,21 +23,24 @@
  */
 
 using System;
-using System.IO;
-using System.Diagnostics;
-using System.Windows.Forms;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace plexdata.ClickTheBrick
 {
     public class Highscore : ICloneable
     {
-        public static string DefaultDateValue = "0000-00-00";
-        public static string DefaultTimeValue = "00:00:00";
+        private const String DateFormat = "yyyy-MM-dd";
+
+        public static String DefaultDateValue = "0000-00-00";
+        public static String DefaultTimeValue = "00:00:00";
 
         // Keep in mind to make changes in function Save() and Parse() if something has changed!
-        public static string HighscoreHeader = "Date;Time;Type;Total;Left;Biggest;Score;";
-        public static string HighscoreFormat = "{0};{1};{2};{3};{4};{5};{6};";
+        public static String HighscoreHeader = "Date;Time;Type;Total;Left;Biggest;Score;";
+        public static String HighscoreFormat = "{0};{1};{2};{3};{4};{5};{6};";
 
         public Highscore()
             : base()
@@ -78,7 +81,7 @@ namespace plexdata.ClickTheBrick
 
         #region Public static member function section.
 
-        public static string Filename
+        public static String Filename
         {
             get
             {
@@ -95,18 +98,18 @@ namespace plexdata.ClickTheBrick
             }
         }
 
-        public static bool Save(List<Highscore> items)
+        public static Boolean Save(List<Highscore> items)
         {
             return Highscore.Save(Highscore.Filename, items);
         }
 
-        public static bool Save(string filename, List<Highscore> items)
+        public static Boolean Save(String filename, List<Highscore> items)
         {
             try
             {
                 if (items != null && items.Count > 0)
                 {
-                    bool header = !File.Exists(filename);
+                    Boolean header = !File.Exists(filename);
 
                     using (TextWriter writer = new StreamWriter(filename, true))
                     {
@@ -130,12 +133,12 @@ namespace plexdata.ClickTheBrick
             return false;
         }
 
-        public static bool Load(out List<Highscore> result)
+        public static Boolean Load(out List<Highscore> result)
         {
             return Highscore.Load(Highscore.Filename, out result);
         }
 
-        public static bool Load(string filename, out List<Highscore> result)
+        public static Boolean Load(String filename, out List<Highscore> result)
         {
             result = new List<Highscore>();
 
@@ -144,7 +147,7 @@ namespace plexdata.ClickTheBrick
                 using (TextReader reader = new StreamReader(filename))
                 {
                     // Strip the file header.
-                    string header = reader.ReadLine();
+                    String header = reader.ReadLine();
 
                     // Read the rest of the file.
                     while (reader.Peek() != -1)
@@ -162,13 +165,27 @@ namespace plexdata.ClickTheBrick
             return result.Count > 0;
         }
 
-        public static Highscore Parse(string value)
+        public static List<Highscore> LoadHighscoreToday()
+        {
+            List<Highscore> result = new List<Highscore>();
+
+            if (Highscore.Load(Highscore.Filename, out List<Highscore> helper))
+            {
+                String date = DateTime.Today.ToString(Highscore.DateFormat);
+
+                result.AddRange(helper.Where(x => x.Date == date));
+            }
+
+            return result;
+        }
+
+        public static Highscore Parse(String value)
         {
             Highscore result = new Highscore();
 
             if (!String.IsNullOrEmpty(value))
             {
-                string[] items = value.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                String[] items = value.Split(new Char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
                 if (items != null && items.Length >= 7)
                 {
                     result.Date = items[0];
@@ -179,7 +196,7 @@ namespace plexdata.ClickTheBrick
                         result.Type = (GameType)Enum.Parse(typeof(GameType), items[2]);
                     }
 
-                    int helper;
+                    Int32 helper;
 
                     if (Int32.TryParse(items[3], out helper)) { result.Total = helper; }
                     if (Int32.TryParse(items[4], out helper)) { result.Left = helper; }
@@ -191,13 +208,13 @@ namespace plexdata.ClickTheBrick
             return result.IsValid ? result : null;
         }
 
-        public static string Format(DateTime date)
+        public static String Format(DateTime date)
         {
             try
             {
                 if (date != null)
                 {
-                    return date.ToString("yyyy-MM-dd");
+                    return date.ToString(Highscore.DateFormat);
                 }
             }
             catch (Exception exception)
@@ -207,7 +224,7 @@ namespace plexdata.ClickTheBrick
             return Highscore.DefaultDateValue;
         }
 
-        public static string Format(TimeSpan time)
+        public static String Format(TimeSpan time)
         {
             try
             {
@@ -230,7 +247,7 @@ namespace plexdata.ClickTheBrick
 
         #region Public property section.
 
-        public bool IsValid
+        public Boolean IsValid
         {
             get
             {
@@ -243,25 +260,25 @@ namespace plexdata.ClickTheBrick
             }
         }
 
-        public string Date { get; set; }
+        public String Date { get; set; }
 
-        public string Time { get; set; }
+        public String Time { get; set; }
 
         public GameType Type { get; set; }
 
-        public int Total { get; set; }
+        public Int32 Total { get; set; }
 
-        public int Left { get; set; }
+        public Int32 Left { get; set; }
 
-        public int Biggest { get; set; }
+        public Int32 Biggest { get; set; }
 
-        public int Score { get; set; }
+        public Int32 Score { get; set; }
 
         #endregion // Public property section.
 
         #region Public member function section.
 
-        public string ToLine()
+        public String ToLine()
         {
             return String.Format(Highscore.HighscoreFormat,
                 (String.IsNullOrEmpty(this.Date) ? Highscore.DefaultDateValue : this.Date),
@@ -269,7 +286,7 @@ namespace plexdata.ClickTheBrick
                 this.Type, this.Total, this.Left, this.Biggest, this.Score);
         }
 
-        public override string ToString()
+        public override String ToString()
         {
             return String.Format(
                 "Date={0}, Time={1}, Type={2}, Total={3}, Left={4}, Biggest={5}, Score={6}",
@@ -278,7 +295,7 @@ namespace plexdata.ClickTheBrick
                 this.Type, this.Total, this.Left, this.Biggest, this.Score);
         }
 
-        public object Clone()
+        public Object Clone()
         {
             return new Highscore(this);
         }
