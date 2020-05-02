@@ -87,9 +87,9 @@ namespace plexdata.ClickTheBrick
             this.valTotal = new System.Windows.Forms.Label();
             this.lblTotal = new System.Windows.Forms.Label();
             this.panGame = new System.Windows.Forms.Panel();
+            this.marathonTimer = new System.Windows.Forms.Timer(this.components);
             this.brickProgress = new plexdata.Controls.ProgressBar3D();
             this.brickPanel = new plexdata.ClickTheBrick.BrickPanel();
-            this.marathonTimer = new System.Windows.Forms.Timer(this.components);
             this.toolBar.SuspendLayout();
             this.panScore.SuspendLayout();
             this.panGame.SuspendLayout();
@@ -428,6 +428,11 @@ namespace plexdata.ClickTheBrick
             this.panGame.Size = new System.Drawing.Size(194, 183);
             this.panGame.TabIndex = 2;
             // 
+            // marathonTimer
+            // 
+            this.marathonTimer.Interval = 1000;
+            this.marathonTimer.Tick += new System.EventHandler(this.OnMarathonTimerTick);
+            // 
             // brickProgress
             // 
             this.brickProgress.Location = new System.Drawing.Point(9, 144);
@@ -454,16 +459,11 @@ namespace plexdata.ClickTheBrick
             this.brickPanel.Size = new System.Drawing.Size(173, 129);
             this.brickPanel.TabIndex = 0;
             this.brickPanel.Text = "???";
-            this.brickPanel.Undone += new System.EventHandler<plexdata.ClickTheBrick.UndoneEventArgs>(this.OnBrickPanelUndone);
             this.brickPanel.GameOver += new System.EventHandler<System.EventArgs>(this.OnBrickPanelGameOver);
-            this.brickPanel.BrickCountChanged += new System.EventHandler<System.EventArgs>(this.OnBrickPanelBrickCountChanged);
             this.brickPanel.AllBricksRemoved += new System.EventHandler<System.EventArgs>(this.OnBrickPanelAllBricksRemoved);
+            this.brickPanel.BrickCountChanged += new System.EventHandler<System.EventArgs>(this.OnBrickPanelBrickCountChanged);
+            this.brickPanel.Undone += new System.EventHandler<plexdata.ClickTheBrick.UndoneEventArgs>(this.OnBrickPanelUndone);
             this.brickPanel.SizeChanged += new System.EventHandler(this.OnBrickPanelSizeChanged);
-            // 
-            // marathonTimer
-            // 
-            this.marathonTimer.Interval = 1000;
-            this.marathonTimer.Tick += new System.EventHandler(this.OnMarathonTimerTick);
             // 
             // MainForm
             // 

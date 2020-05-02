@@ -23,12 +23,12 @@
  */
 
 using System;
-using System.Linq;
-using System.Drawing;
-using System.Diagnostics;
-using System.Windows.Forms;
-using System.ComponentModel;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace plexdata.ClickTheBrick
 {
@@ -36,8 +36,8 @@ namespace plexdata.ClickTheBrick
     {
         // BUG: Undo handling for game type "Marathon" does not really work.
 
-        private readonly int MarathonRepeats = 10;
-        private readonly string DefaultRankingValue = "\u2014";
+        private readonly Int32 MarathonRepeats = 10;
+        private readonly String DefaultRankingValue = "\u2014";
 
         private DateTime startTime = default(DateTime);
         private ApplicationSettings settings = new ApplicationSettings();
@@ -65,12 +65,11 @@ namespace plexdata.ClickTheBrick
         }
 
         [Browsable(false)]
-        public int ScoreValue
+        public Int32 ScoreValue
         {
             get
             {
-                int result = 0;
-                if (Int32.TryParse(this.valScore.Text, out result))
+                if (Int32.TryParse(this.valScore.Text, out Int32 result))
                 {
                     return result;
                 }
@@ -82,12 +81,11 @@ namespace plexdata.ClickTheBrick
         }
 
         [Browsable(false)]
-        public int BricksLeft
+        public Int32 BricksLeft
         {
             get
             {
-                int result = 0;
-                if (Int32.TryParse(this.valLeft.Text, out result))
+                if (Int32.TryParse(this.valLeft.Text, out Int32 result))
                 {
                     return result;
                 }
@@ -106,8 +104,7 @@ namespace plexdata.ClickTheBrick
 
             base.OnLoad(args);
 
-            ApplicationSettings helper = null;
-            if (ApplicationSettings.Load(out helper))
+            if (ApplicationSettings.Load(out ApplicationSettings helper))
             {
                 this.settings = new ApplicationSettings(helper);
             }
@@ -134,7 +131,7 @@ namespace plexdata.ClickTheBrick
             Highscore.Save(this.highscore);
         }
 
-        protected override bool ProcessCmdKey(ref Message msg, Keys keys)
+        protected override Boolean ProcessCmdKey(ref Message msg, Keys keys)
         {
             if (keys == Keys.F1)
             {
@@ -156,12 +153,12 @@ namespace plexdata.ClickTheBrick
 
         #region Brick Panel and Brick Progress Event Handling.
 
-        private void OnBrickPanelSizeChanged(object sender, EventArgs args)
+        private void OnBrickPanelSizeChanged(Object sender, EventArgs args)
         {
             this.SetupBrickProgress();
         }
 
-        private void OnBrickPanelBrickCountChanged(object sender, EventArgs args)
+        private void OnBrickPanelBrickCountChanged(Object sender, EventArgs args)
         {
             this.valLeft.Text = this.brickPanel.BrickCount.ToString();
 
@@ -177,7 +174,7 @@ namespace plexdata.ClickTheBrick
             this.UpdateToolbar();
         }
 
-        private void OnBrickPanelGameOver(object sender, EventArgs args)
+        private void OnBrickPanelGameOver(Object sender, EventArgs args)
         {
             // Alternatively use: this.GetGameType() == GameType.Marathon...
             if (this.brickProgress.Visible)
@@ -195,7 +192,7 @@ namespace plexdata.ClickTheBrick
             }
         }
 
-        private void OnBrickPanelAllBricksRemoved(object sender, EventArgs args)
+        private void OnBrickPanelAllBricksRemoved(Object sender, EventArgs args)
         {
             if (this.GetGameType() == GameType.Standard)
             {
@@ -208,12 +205,12 @@ namespace plexdata.ClickTheBrick
             }
         }
 
-        private void OnBrickProgressVisibilityChanged(object sender, EventArgs args)
+        private void OnBrickProgressVisibilityChanged(Object sender, EventArgs args)
         {
             this.SetupBrickProgress();
         }
 
-        private void OnBrickPanelUndone(object sender, UndoneEventArgs args)
+        private void OnBrickPanelUndone(Object sender, UndoneEventArgs args)
         {
             // Simply restore those values.
             this.valScore.Text = args.ScoreValue.ToString();
@@ -224,7 +221,7 @@ namespace plexdata.ClickTheBrick
 
         #region Toolbar Event Handling.
 
-        private void OnToolBarPaint(object sender, PaintEventArgs args)
+        private void OnToolBarPaint(Object sender, PaintEventArgs args)
         {
             using (Brush brush = new SolidBrush(this.BackColor))
             {
@@ -232,18 +229,18 @@ namespace plexdata.ClickTheBrick
             }
         }
 
-        private void OnButtonExitClick(object sender, EventArgs args)
+        private void OnButtonExitClick(Object sender, EventArgs args)
         {
             this.StopGame();
             this.Close();
         }
 
-        private void OnButtonTypeClick(object sender, EventArgs args)
+        private void OnButtonTypeClick(Object sender, EventArgs args)
         {
             this.tbbType.ShowDropDown();
         }
 
-        private void OnTypeMenuItemClick(object sender, EventArgs args)
+        private void OnTypeMenuItemClick(Object sender, EventArgs args)
         {
             foreach (ToolStripItem item in this.tbbType.DropDownItems)
             {
@@ -256,13 +253,13 @@ namespace plexdata.ClickTheBrick
             }
         }
 
-        private void OnButtonUndoClick(object sender, EventArgs args)
+        private void OnButtonUndoClick(Object sender, EventArgs args)
         {
             this.brickPanel.Undo();
             this.UpdateToolbar();
         }
 
-        private void OnButtonStartClick(object sender, EventArgs args)
+        private void OnButtonStartClick(Object sender, EventArgs args)
         {
             this.ClearGame();
             this.SetupGame();
@@ -271,7 +268,7 @@ namespace plexdata.ClickTheBrick
             this.UpdateToolbar();
         }
 
-        private void OnButtonSettingsClick(object sender, EventArgs args)
+        private void OnButtonSettingsClick(Object sender, EventArgs args)
         {
             SettingsDialog dialog = new SettingsDialog(this.settings.BrickPanel);
             if (DialogResult.OK == dialog.ShowDialog(this))
@@ -282,12 +279,12 @@ namespace plexdata.ClickTheBrick
             }
         }
 
-        private void OnButtonInfoClick(object sender, EventArgs args)
+        private void OnButtonInfoClick(Object sender, EventArgs args)
         {
             this.tbbInfo.ShowDropDown();
         }
 
-        private void OnInfoMenuItemClick(object sender, EventArgs args)
+        private void OnInfoMenuItemClick(Object sender, EventArgs args)
         {
             if (sender == this.tbmInfoAbout)
             {
@@ -305,17 +302,17 @@ namespace plexdata.ClickTheBrick
 
         #region Elapse and Marathon Timer Event Handling.
 
-        private void OnElapseTimerTick(object sender, EventArgs args)
+        private void OnElapseTimerTick(Object sender, EventArgs args)
         {
             this.HandleElapseTick(this.GetGameType());
         }
 
-        private void OnMarathonTimerTick(object sender, EventArgs args)
+        private void OnMarathonTimerTick(Object sender, EventArgs args)
         {
             if (this.brickProgress.Value >= this.brickProgress.Maximum)
             {
                 // Reduce current timer value by 100 ms.
-                int interval = this.marathonTimer.Interval - 100;
+                Int32 interval = this.marathonTimer.Interval - 100;
 
                 // Check if minimum timer interval touches the lowest limit.
                 if (interval < 100) { interval = 100; }
@@ -330,7 +327,7 @@ namespace plexdata.ClickTheBrick
                 {
                     this.brickProgress.Value = 0;
 
-                    if ((int)this.marathonTimer.Tag <= 0)
+                    if ((Int32)this.marathonTimer.Tag <= 0)
                     {
                         this.marathonTimer.Interval = interval;
 
@@ -338,7 +335,7 @@ namespace plexdata.ClickTheBrick
                     }
                     else
                     {
-                        this.marathonTimer.Tag = (int)this.marathonTimer.Tag - 1;
+                        this.marathonTimer.Tag = (Int32)this.marathonTimer.Tag - 1;
                     }
                 }
             }
@@ -386,7 +383,7 @@ namespace plexdata.ClickTheBrick
                     else
                     {
                         throw new NotSupportedException(
-                            "Game type " + (int)type + " is not supported!");
+                            "Game type " + (Int32)type + " is not supported!");
                     }
                 }
             }
@@ -464,10 +461,8 @@ namespace plexdata.ClickTheBrick
 
         private void NextGame()
         {
-            int total = 0;
-
             // Determine current total count.
-            bool success = Int32.TryParse(this.valTotal.Text, out total);
+            Boolean success = Int32.TryParse(this.valTotal.Text, out Int32 total);
 
             // Keep me informed...
             Debug.Assert(success);
@@ -528,9 +523,9 @@ namespace plexdata.ClickTheBrick
             }
         }
 
-        private void SetScore(int value)
+        private void SetScore(Int32 value)
         {
-            int helper = 0;
+            Int32 helper = 0;
             if (value <= 0)
             {
                 this.valScore.Text = helper.ToString();
@@ -541,9 +536,9 @@ namespace plexdata.ClickTheBrick
             }
         }
 
-        private void SetBiggest(int value)
+        private void SetBiggest(Int32 value)
         {
-            int helper = 0;
+            Int32 helper = 0;
             if (value <= 0)
             {
                 this.valBiggest.Text = helper.ToString();
@@ -559,7 +554,7 @@ namespace plexdata.ClickTheBrick
             this.HandleGameOver(false);
         }
 
-        private void HandleGameOver(bool elapsed)
+        private void HandleGameOver(Boolean elapsed)
         {
             this.StopGame();
 
@@ -567,12 +562,12 @@ namespace plexdata.ClickTheBrick
             if (this.brickPanel.BrickCount == 0)
             {
                 this.brickPanel.Text = "Awesome!";
-                this.SetScore(this.brickPanel.TotalBrickCount * 4);
+                this.SetScore(this.brickPanel.TotalBrickCount * 6);
             }
             else if (this.brickPanel.BrickCount == 1)
             {
                 this.brickPanel.Text = "Not bad!";
-                this.SetScore(this.brickPanel.TotalBrickCount);
+                this.SetScore(this.brickPanel.TotalBrickCount * 2);
             }
             else if (elapsed)
             {
@@ -583,11 +578,14 @@ namespace plexdata.ClickTheBrick
                 this.brickPanel.Text = "Game Over";
             }
 
-            Highscore item = new Highscore(DateTime.Now);
-            item.Type = this.GetGameType();
-            item.Time = this.valTime.Text;
+            Highscore item = new Highscore(DateTime.Now)
+            {
+                Type = this.GetGameType(),
+                Time = this.valTime.Text
+            };
 
-            int helper;
+            Int32 helper;
+
             if (Int32.TryParse(this.valTotal.Text, out helper)) { item.Total = helper; }
             if (Int32.TryParse(this.valLeft.Text, out helper)) { item.Left = helper; }
             if (Int32.TryParse(this.valBiggest.Text, out helper)) { item.Biggest = helper; }
@@ -599,7 +597,7 @@ namespace plexdata.ClickTheBrick
 
                 // Calculate current ranking for current game type.
                 List<Highscore> copy = new List<Highscore>(this.highscore.Where(type => type.Type == item.Type));
-                copy.Sort(delegate(Highscore left, Highscore right) { return right.Score.CompareTo(left.Score); });
+                copy.Sort(delegate (Highscore left, Highscore right) { return right.Score.CompareTo(left.Score); });
                 this.valRanking.Text = (copy.FindIndex(value => value.Score == item.Score) + 1).ToString();
             }
         }

@@ -75,12 +75,12 @@ namespace plexdata.ClickTheBrick
             }
         }
 
-        public bool Contains(Point point)
+        public Boolean Contains(Point point)
         {
             return this.Bounds.Contains(point);
         }
 
-        public bool IsSibling(Brick other)
+        public Boolean IsSibling(Brick other)
         {
             if (other != null && other != this)
             {
@@ -92,7 +92,7 @@ namespace plexdata.ClickTheBrick
             }
         }
 
-        public void Move(int row, int col)
+        public void Move(Int32 row, Int32 col)
         {
             Point position = new Point(this.Position.X, this.Position.Y);
             if (row >= 0) { position.Y = row; }
@@ -105,7 +105,7 @@ namespace plexdata.ClickTheBrick
             this.Draw(graphics, false);
         }
 
-        public void Draw(Graphics graphics, bool focused)
+        public void Draw(Graphics graphics, Boolean focused)
         {
             if (graphics != null)
             {
@@ -118,7 +118,7 @@ namespace plexdata.ClickTheBrick
             }
         }
 
-        private Color GetColor(bool focused)
+        private Color GetColor(Boolean focused)
         {
             if (focused)
             {
@@ -132,7 +132,7 @@ namespace plexdata.ClickTheBrick
 
         #region ICloneable implementation.
 
-        public object Clone()
+        public Object Clone()
         {
             return new Brick(this);
         }

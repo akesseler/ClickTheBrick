@@ -23,14 +23,14 @@
  */
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Collections;
-using System.Diagnostics;
-using System.Globalization;
 using System.Windows.Forms;
-using System.Collections.Generic;
 
 namespace plexdata.ClickTheBrick
 {
@@ -61,6 +61,7 @@ namespace plexdata.ClickTheBrick
             if (highscore != null)
             {
                 this.highscore = new List<Highscore>(highscore);
+                this.highscore.AddRange(Highscore.LoadHighscoreToday());
                 this.highscore.Sort(new HighscoreSorter());
             }
         }
@@ -85,30 +86,31 @@ namespace plexdata.ClickTheBrick
             }
         }
 
-        private void OnButtonOkClick(object sender, EventArgs args)
+        private void OnButtonOkClick(Object sender, EventArgs args)
         {
             this.Close();
         }
 
-        private void OnButtonOpenClick(object sender, EventArgs args)
+        private void OnButtonOpenClick(Object sender, EventArgs args)
         {
             try
             {
-                string extension = Path.GetExtension(Highscore.Filename);
-                string directory = Path.GetDirectoryName(Highscore.Filename);
+                String extension = Path.GetExtension(Highscore.Filename);
+                String directory = Path.GetDirectoryName(Highscore.Filename);
 
-                OpenFileDialog dialog = new OpenFileDialog();
-                dialog.Filter = String.Format("Highscore Files (*{0})|*{0}|All files (*.*)|*.*", extension);
-                dialog.DefaultExt = extension;
-                dialog.InitialDirectory = directory;
-                dialog.Multiselect = false;
-                dialog.RestoreDirectory = true;
-                dialog.ShowHelp = false;
+                OpenFileDialog dialog = new OpenFileDialog
+                {
+                    Filter = String.Format("Highscore Files (*{0})|*{0}|All files (*.*)|*.*", extension),
+                    DefaultExt = extension,
+                    InitialDirectory = directory,
+                    Multiselect = false,
+                    RestoreDirectory = true,
+                    ShowHelp = false
+                };
 
                 if (DialogResult.OK == dialog.ShowDialog(this))
                 {
-                    List<Highscore> helper;
-                    if (Highscore.Load(dialog.FileName, out helper))
+                    if (Highscore.Load(dialog.FileName, out List<Highscore> helper))
                     {
                         this.highscore = helper;
                         this.highscore.Sort(new HighscoreSorter());
@@ -135,7 +137,7 @@ namespace plexdata.ClickTheBrick
             }
         }
 
-        private void OnTypeSelectedIndexChanged(object sender, EventArgs args)
+        private void OnTypeSelectedIndexChanged(Object sender, EventArgs args)
         {
             if (this.cmbType.SelectedItem != null)
             {
@@ -143,7 +145,7 @@ namespace plexdata.ClickTheBrick
             }
         }
 
-        private void OnScoreListColumnClick(object sender, ColumnClickEventArgs args)
+        private void OnScoreListColumnClick(Object sender, ColumnClickEventArgs args)
         {
             this.Cursor = Cursors.WaitCursor;
             this.scoreList.BeginUpdate();
@@ -254,17 +256,17 @@ namespace plexdata.ClickTheBrick
                         foreach (Highscore current in list)
                         {
                             // Create and add current highscore value.
-                            ListViewItem item = new ListViewItem(new string[] { 
-                                current.Time, current.Type.ToString(), 
-                                current.Total.ToString("N0", info), 
-                                current.Left.ToString("N0", info), 
-                                current.Biggest.ToString("N0", info), 
+                            ListViewItem item = new ListViewItem(new String[] {
+                                current.Time, current.Type.ToString(),
+                                current.Total.ToString("N0", info),
+                                current.Left.ToString("N0", info),
+                                current.Biggest.ToString("N0", info),
                                 current.Score.ToString("N0", info) });
                             items.Add(item);
 
                             // Try to find a corresponding item group.
                             ListViewGroup group = groups.Find(left => left.Header == current.Date);
-                            if (group == null)
+                            if (group is null)
                             {
                                 // Add a new group if not yet exist.
                                 group = new ListViewGroup(current.Date, current.Date);
@@ -279,9 +281,21 @@ namespace plexdata.ClickTheBrick
                         // Include number of total group items in group header.
                         foreach (ListViewGroup group in groups)
                         {
+                            Int32 completed = 0;
+
+                            foreach (ListViewItem current in group.Items)
+                            {
+                                if (current.SubItems[3].Text == "0")
+                                {
+                                    completed++;
+                                }
+                            }
+
                             group.Header = String.Format(
-                                "{0} ({1})", group.Header,
-                                group.Items.Count.ToString("N0", info));
+                                "{0} (Played: {1} - Completed: {2})",
+                                group.Header,
+                                group.Items.Count.ToString("N0", info),
+                                completed.ToString("N0", info));
                         }
 
                         this.scoreList.Items.AddRange(items.ToArray());
@@ -349,7 +363,7 @@ namespace plexdata.ClickTheBrick
             {
             }
 
-            public int Compare(Highscore itemA, Highscore itemB)
+            public Int32 Compare(Highscore itemA, Highscore itemB)
             {
                 if (itemA == null && itemB == null)
                 {
@@ -381,19 +395,19 @@ namespace plexdata.ClickTheBrick
             {
             }
 
-            public ItemSorter(int column)
+            public ItemSorter(Int32 column)
                 : this(SortOrder.Ascending, column)
             {
             }
 
-            public ItemSorter(SortOrder sorting, int column)
+            public ItemSorter(SortOrder sorting, Int32 column)
                 : base()
             {
                 this.Column = column;
                 this.Sorting = sorting;
             }
 
-            public int Column { get; set; }
+            public Int32 Column { get; set; }
 
             public SortOrder Sorting { get; set; }
 
@@ -409,7 +423,7 @@ namespace plexdata.ClickTheBrick
                 }
             }
 
-            public int Compare(object objA, object objB)
+            public Int32 Compare(Object objA, Object objB)
             {
                 ListViewItem itemA = objA as ListViewItem;
                 ListViewItem itemB = objB as ListViewItem;
@@ -432,18 +446,16 @@ namespace plexdata.ClickTheBrick
                 }
                 else
                 {
-                    int result = 0;
-                    int intA = 0;
-                    int intB = 0;
+                    Int32 result = 0;
 
-                    string strA = itemA.SubItems[this.Column].Text;
-                    string strB = itemB.SubItems[this.Column].Text;
+                    String strA = itemA.SubItems[this.Column].Text;
+                    String strB = itemB.SubItems[this.Column].Text;
 
                     NumberStyles style = NumberStyles.Number;
                     NumberFormatInfo info = CultureInfo.CurrentUICulture.NumberFormat;
 
-                    if (int.TryParse(strA, style, info, out intA) &&
-                        int.TryParse(strB, style, info, out intB))
+                    if (Int32.TryParse(strA, style, info, out Int32 intA) &&
+                        Int32.TryParse(strB, style, info, out Int32 intB))
                     {
                         result = intA.CompareTo(intB);
                     }
@@ -477,7 +489,7 @@ namespace plexdata.ClickTheBrick
 
             public SortOrder Sorting { get; set; }
 
-            public int Compare(ListViewGroup itemA, ListViewGroup itemB)
+            public Int32 Compare(ListViewGroup itemA, ListViewGroup itemB)
             {
                 if (itemA == null && itemB == null)
                 {
@@ -497,7 +509,7 @@ namespace plexdata.ClickTheBrick
                 }
                 else
                 {
-                    int result = itemA.Header.CompareTo(itemB.Header);
+                    Int32 result = itemA.Header.CompareTo(itemB.Header);
 
                     if (this.Sorting != SortOrder.Ascending)
                     {

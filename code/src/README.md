@@ -15,5 +15,6 @@ Nothing known at the moment.
 ## Known Bugs
 
 - Undo handling for game type "Marathon" may cause unexpected scoring results.
+- Sorting high score list items requires two header clicks under some circumstances.
 
 

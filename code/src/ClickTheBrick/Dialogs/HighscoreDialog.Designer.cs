@@ -95,7 +95,7 @@ namespace plexdata.ClickTheBrick
             // 
             // valHighestScore
             // 
-            this.valHighestScore.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.valHighestScore.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.valHighestScore.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.valHighestScore.Location = new System.Drawing.Point(120, 42);
@@ -109,7 +109,7 @@ namespace plexdata.ClickTheBrick
             // 
             // valBiggestBlock
             // 
-            this.valBiggestBlock.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.valBiggestBlock.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.valBiggestBlock.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.valBiggestBlock.Location = new System.Drawing.Point(120, 69);
@@ -123,7 +123,7 @@ namespace plexdata.ClickTheBrick
             // 
             // valNeededTime
             // 
-            this.valNeededTime.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.valNeededTime.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.valNeededTime.AutoEllipsis = true;
             this.valNeededTime.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
@@ -148,7 +148,7 @@ namespace plexdata.ClickTheBrick
             // 
             // valSmallestRemaining
             // 
-            this.valSmallestRemaining.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.valSmallestRemaining.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.valSmallestRemaining.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.valSmallestRemaining.Location = new System.Drawing.Point(120, 123);
@@ -212,8 +212,8 @@ namespace plexdata.ClickTheBrick
             // 
             // scoreList
             // 
-            this.scoreList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.scoreList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.scoreList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.colTime,
